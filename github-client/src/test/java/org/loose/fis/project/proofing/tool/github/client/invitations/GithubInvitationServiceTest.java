@@ -1,7 +1,8 @@
 package org.loose.fis.project.proofing.tool.github.client.invitations;
 
 import org.junit.jupiter.api.Test;
-import org.loose.fis.project.proofing.tool.github.client.TestUtil;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.invitations.Invitation;
+import org.loose.fis.project.proofing.tool.utils.TestUtils;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GithubInvitationServiceTest {
 
-    GithubInvitationService invitationService = new GithubInvitationService(TestUtil.getCredentials());
+    GithubInvitationService invitationService = new GithubInvitationService(TestUtils.getGithubCredentials());
 
     @Test
     void listInvitationsForUser() {

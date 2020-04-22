@@ -1,13 +1,14 @@
 package org.loose.fis.project.proofing.tool.github.client.invitations;
 
 import lombok.extern.slf4j.Slf4j;
-import org.loose.fis.project.proofing.tool.github.client.GithubClientAction;
-import org.loose.fis.project.proofing.tool.github.client.model.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.Action;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.invitations.Invitation;
+import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 
 import java.util.List;
 
 @Slf4j
-public class AcceptInvitationAction implements GithubClientAction<Void> {
+public class AcceptInvitationAction implements Action<Void> {
 
     private GithubInvitationService githubInvitationService;
 
