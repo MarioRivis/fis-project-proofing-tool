@@ -1,4 +1,4 @@
-package org.loose.fis.project.proofing.tool.github.client.dto.request.repository.secrets;
+package org.loose.fis.project.proofing.tool.github.client.dto.request.repository.actions.secrets;
 
 import com.google.api.client.util.Key;
 import lombok.AllArgsConstructor;

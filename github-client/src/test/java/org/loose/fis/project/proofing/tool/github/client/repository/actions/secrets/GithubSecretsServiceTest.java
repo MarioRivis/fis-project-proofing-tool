@@ -1,7 +1,7 @@
-package org.loose.fis.project.proofing.tool.github.client.repository.secrets;
+package org.loose.fis.project.proofing.tool.github.client.repository.actions.secrets;
 
 import org.junit.jupiter.api.Test;
-import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.secrets.Secret;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.Secret;
 import org.loose.fis.project.proofing.tool.utils.TestUtils;
 
 import java.util.List;

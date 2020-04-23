@@ -1,4 +1,4 @@
-package org.loose.fis.project.proofing.tool.github.client.repository.secrets;
+package org.loose.fis.project.proofing.tool.github.client.repository.actions.secrets;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
@@ -10,10 +10,10 @@ import com.goterl.lazycode.lazysodium.utils.Base64MessageEncoder;
 import com.goterl.lazycode.lazysodium.utils.Key;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.loose.fis.project.proofing.tool.github.client.dto.request.repository.secrets.SecretRequestBody;
-import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.secrets.Secret;
-import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.secrets.SecretsForRepo;
-import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.secrets.SecretsPublicKey;
+import org.loose.fis.project.proofing.tool.github.client.dto.request.repository.actions.secrets.SecretRequestBody;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.Secret;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.SecretsForRepo;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.SecretsPublicKey;
 import org.loose.fis.project.proofing.tool.github.client.repository.GithubRepositoryService;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 
