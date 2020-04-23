@@ -6,24 +6,23 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.github.client.GithubClient;
+import org.loose.fis.project.proofing.tool.github.client.GithubService;
 import org.loose.fis.project.proofing.tool.github.client.dto.response.invitations.Invitation;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
-import org.loose.fis.project.proofing.tool.http.HttpClient;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class GithubInvitationService {
-
+public class GithubInvitationService extends GithubService {
     private static String GET_INVITATIONS_URL = GithubClient.getApiPath("user", "repository_invitations");
 
-    private HttpClient httpClient = new HttpClient();
-    private BasicAuthCredentials credentials;
-
+    public GithubInvitationService() {
+        super();
+    }
 
     public GithubInvitationService(BasicAuthCredentials credentials) {
-        this.credentials = credentials;
+        super(credentials);
     }
 
     @SneakyThrows
