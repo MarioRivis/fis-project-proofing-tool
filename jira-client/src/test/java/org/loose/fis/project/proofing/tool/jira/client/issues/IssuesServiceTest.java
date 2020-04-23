@@ -6,6 +6,7 @@ import org.loose.fis.project.proofing.tool.utils.TestUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,5 +36,29 @@ class IssuesServiceTest {
 
         System.out.printf("Average subtasks per story: %f", averageSubtasksPerStory);
 
+    }
+
+    @Test
+    void testGetChangesForAllIssues() {
+        List<Issue> issues = issuesService.getAllIssuesForProjects("SM");
+
+
+        issues.forEach(issue -> {
+            ChangeLog changeLog = new ChangeLog();
+            changeLog.setChanges(issuesService.getChangeLogForIssue(issue.getKey()));
+            issue.setChangelog(changeLog);
+        });
+
+        issues.stream().forEach(issue -> {
+            System.out.println(String.format("%s: %s", issue.getKey(), issue.getSummary()));
+            issue.getChangelog().getChanges().stream()
+                    .filter(issueChange -> issueChange.getItems().stream().anyMatch(changeItem -> "status".equalsIgnoreCase(changeItem.getField())))
+                    .forEach(issueChange -> {
+                        Optional<ChangeItem> first = issueChange.getItems().stream().filter(changeItem -> "status".equalsIgnoreCase(changeItem.getField())).findFirst();
+                        first.ifPresent(
+                                changeItem -> System.out.println(String.format("\t%s: [%s] -> [%s]", issueChange.getCreated(), changeItem.getFromString(), changeItem.getToString()))
+                        );
+                    });
+        });
     }
 }

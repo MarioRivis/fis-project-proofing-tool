@@ -4,19 +4,14 @@ import com.google.api.client.util.Key;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.loose.fis.project.proofing.tool.jira.client.pagination.Paginated;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssueSearchResult {
-    @Key
-    private int startIndex;
-    @Key
-    private int maxResults;
-    @Key
-    private int total;
+public class IssueSearchResult extends Paginated {
     @Key
     private List<Issue> issues;
 }

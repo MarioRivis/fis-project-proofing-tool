@@ -49,6 +49,7 @@ public class HttpClient {
         JsonHttpContent content = getJsonHttpContent(body);
 
         HttpRequest request = requestFactory.buildPutRequest(url, content);
+        request.setLoggingEnabled(true);
         return request.execute();
     }
 

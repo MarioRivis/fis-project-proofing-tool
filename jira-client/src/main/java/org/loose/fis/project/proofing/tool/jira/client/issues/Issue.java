@@ -15,6 +15,9 @@ public class Issue extends GenericJson {
     @Delegate
     private IssueFields fields;
 
+    @Key
+    private ChangeLog changelog;
+
     public boolean hasSubtasks() {
         return CollectionUtils.isNotEmpty(fields.getSubtasks());
     }
