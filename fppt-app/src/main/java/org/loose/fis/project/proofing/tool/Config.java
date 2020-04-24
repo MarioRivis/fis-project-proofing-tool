@@ -10,8 +10,13 @@ import java.util.Properties;
 public class Config {
 
     public static final String FORM_NAME = "Form1";
-    private static String STUDENT_RESPONSES = "studentResponses";
-    private static String TEACHER_FIELD = "teacher";
+    private static final String JIRA_TOKEN = "jira.token";
+    private static final String JIRA_USERNAME = "jira.username";
+    private static final String GITHUB_USERNAME = "github.username";
+    private static final String GITHUB_TOKEN = "github.token";
+    private static final String FPPT_PROPERTIES = "fppt.properties";
+    private static final String STUDENT_RESPONSES = "studentResponses";
+    private static final String TEACHER_FIELD = "teacher";
 
     private static Properties properties;
 
@@ -32,15 +37,15 @@ public class Config {
     @SneakyThrows
     private static void loadProperties() {
         properties = new Properties();
-        properties.load(new FileReader(Paths.get(".", "config", "fppt.properties").toFile()));
+        properties.load(new FileReader(Paths.get(".", "config", FPPT_PROPERTIES).toFile()));
     }
 
     public static BasicAuthCredentials getGithubCredentials() {
-        return new BasicAuthCredentials(getProperty("github.username"), getProperty("github.token"));
+        return new BasicAuthCredentials(getProperty(GITHUB_USERNAME), getProperty(GITHUB_TOKEN));
     }
 
     public static BasicAuthCredentials getJiraCredentials() {
-        return new BasicAuthCredentials(getProperty("jira.username"), getProperty("jira.token"));
+        return new BasicAuthCredentials(getProperty(JIRA_USERNAME), getProperty(JIRA_TOKEN));
     }
 
     public static String getStudentResponsesFilePath() {
@@ -49,5 +54,9 @@ public class Config {
 
     public static String getTeacherName() {
         return getProperty(TEACHER_FIELD, "");
+    }
+
+    public static String getJiraToken() {
+        return getProperty(JIRA_TOKEN);
     }
 }

@@ -37,25 +37,29 @@ public class CheckAccessActions {
         return null;
     }
 
-    private static void checkGithubAccessForStudentResponse(StudentResponse studentResponse) {
+    static boolean checkGithubAccessForStudentResponse(StudentResponse studentResponse) {
         GithubSecretsService githubSecretsService = new GithubSecretsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
         System.out.printf("Checking Github access to %s [%s]............", studentResponse.getRepoUrl(), studentResponse.getName());
         try {
             githubSecretsService.listAllSecretsForRepo();
             System.out.println("SUCCESSFUL");
+            return true;
         } catch (Exception e) {
             System.err.println("FAILED");
+            return false;
         }
     }
 
-    private static void checkJiraAccessForStudentResponse(StudentResponse studentResponse) {
+    static boolean checkJiraAccessForStudentResponse(StudentResponse studentResponse) {
         ProjectsService projectsService = new ProjectsService(studentResponse.getJiraUrl(), Config.getJiraCredentials());
         System.out.printf("Checking Jira access to %s [%s]............", studentResponse.getJiraUrl(), studentResponse.getName());
         try {
             projectsService.getProject(studentResponse.getJiraProjectId());
             System.out.println("SUCCESSFUL");
+            return true;
         } catch (Exception e) {
             System.err.println("FAILED");
+            return false;
         }
     }
 }

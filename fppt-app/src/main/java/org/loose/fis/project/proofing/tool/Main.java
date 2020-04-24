@@ -1,10 +1,7 @@
 package org.loose.fis.project.proofing.tool;
 
 import com.google.common.collect.ImmutableMap;
-import org.loose.fis.project.proofing.tool.actions.Action;
-import org.loose.fis.project.proofing.tool.actions.CheckAccessActions;
-import org.loose.fis.project.proofing.tool.actions.Command;
-import org.loose.fis.project.proofing.tool.actions.InvitationActions;
+import org.loose.fis.project.proofing.tool.actions.*;
 import org.loose.fis.project.proofing.tool.exceptions.FeatureUnavailableException;
 import org.loose.fis.project.proofing.tool.exceptions.IllegalCommandException;
 
@@ -12,13 +9,14 @@ import java.util.Map;
 
 public class Main {
 
-    private static Map<Command, Action> actionsMap = ImmutableMap.of(
-            Command.LIST_INVITATIONS, InvitationActions::listInvitations,
-            Command.ACCEPT_INVITATIONS, InvitationActions::acceptInvitations,
-            Command.CHECK_GIT_ACCESS, CheckAccessActions::checkGithubAccessAction,
-            Command.CHECK_JIRA_ACCESS, CheckAccessActions::checkJiraAccessAction,
-            Command.CHECK_ACCESS, CheckAccessActions::checkAccessAction
-    );
+    private static Map<Command, Action> actionsMap = ImmutableMap.builder()
+            .put(Command.LIST_INVITATIONS, InvitationActions::listInvitations)
+            .put(Command.ACCEPT_INVITATIONS, InvitationActions::acceptInvitations)
+            .put(Command.CHECK_GIT_ACCESS, CheckAccessActions::checkGithubAccessAction)
+            .put(Command.CHECK_JIRA_ACCESS, CheckAccessActions::checkJiraAccessAction)
+            .put(Command.CHECK_ACCESS, CheckAccessActions::checkAccessAction)
+            .put(Command.UPLOAD_WORKFLOW, WorkflowActions::createWorkflowFile)
+            .build();
 
 
     public static void main(String[] args) {
