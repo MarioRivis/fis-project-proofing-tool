@@ -1,24 +1,34 @@
 package org.loose.fis.project.proofing.tool.jira.client.export;
 
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeItem;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueChange;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueField;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
+import org.loose.fis.project.proofing.tool.utils.JsonMapper;
 
-import java.nio.file.Files;
+import java.io.FileWriter;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
+
 public class ResultExporter {
+	public void export(List<Issue> issues, Path toPath) {
+		export(issues, toPath, emptyList());
+	}
+
 	@SneakyThrows
-	public void export(List<Issue> issues, List<IssueField> customFields, Path toPath) {
+	public void export(List<Issue> issues, Path toPath, List<IssueField> customFields) {
 		List<ExportUser> exportUsers = issues.stream()
 				.flatMap(issue -> Stream.of(issue.getCreator(), issue.getReporter(), issue.getAssignee()))
-				.filter(Objects::nonNull).distinct()
+				.filter(user -> user.getAccountId() != null).distinct()
 				.map(user -> ExportUser.builder().id(user.getAccountId()).name(user.getDisplayName())
 						.avatarUrl((String) user.getAvatarUrls().get("32x32")).build()).collect(Collectors.toList());
 
@@ -41,11 +51,13 @@ public class ResultExporter {
 		ExportResult exportResult = ExportResult.builder().users(exportUsers).issueTypes(exportIssueTypes)
 				.issues(exportIssues).build();
 
-		Files.write(toPath, Collections.singleton(exportResult.toString()));
+		new JsonMapper().writeJSON(new FileWriter(toPath.toFile()), exportResult);
 	}
 
 	private Map<String, Object> getCustomFields(Issue issue, List<IssueField> customFields) {
-		return customFields.stream().collect(Collectors.toMap(IssueField::getName, field -> issue.get(field.getId())));
+		return customFields.stream().map(field -> new ImmutablePair<>(field.getName(), issue.get(field.getId())))
+				.filter(pair -> pair.getRight() != null)
+				.collect(Collectors.toMap(ImmutablePair::getLeft, ImmutablePair::getRight));
 	}
 
 	private String getDescription(Issue issue) {
@@ -61,7 +73,7 @@ public class ResultExporter {
 	}
 
 	private List<ExportComment> getComments(Issue issue) {
-		return Collections.emptyList();
+		return emptyList();
 	}
 
 	private List<ExportChange> getChanges(Issue issue) {

@@ -3,12 +3,14 @@ package org.loose.fis.project.proofing.tool.jira.client.dto.response.issues;
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
 
 import java.util.List;
 
 @Data
-public class IssueFields {
+@EqualsAndHashCode(callSuper = true)
+public class IssueFields extends GenericJson {
     @Key
     private Issue parent;
     @Key
