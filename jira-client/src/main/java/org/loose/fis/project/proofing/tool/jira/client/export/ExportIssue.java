@@ -70,10 +70,22 @@ public class ExportIssue {
 	 */
     @Key
 	private String priority;
+
+    /**
+     * The id of the creator user
+     */
     @Key
 	private String creatorId;
+
+    /**
+     * The id of the assignee user
+     */
     @Key
 	private String assigneeId;
+
+    /**
+     * The id of the reporter user
+     */
     @Key
 	private String reporterId;
     /**
@@ -81,10 +93,19 @@ public class ExportIssue {
      */
     @Key
     private List<String> subTasks;
+    /**
+     * List of changes
+     */
     @Key
     private List<ExportChange> changes;
+    /**
+     * List of comments
+     */
     @Key
     private List<ExportComment> comments;
+    /**
+     * Map of field name to value of additional fields in issues
+     */
     @Key
     private Map<String, Object> customFields;
 }
