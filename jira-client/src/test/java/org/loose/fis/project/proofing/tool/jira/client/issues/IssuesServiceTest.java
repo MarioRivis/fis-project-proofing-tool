@@ -1,6 +1,9 @@
 package org.loose.fis.project.proofing.tool.jira.client.issues;
 
 import org.junit.jupiter.api.Test;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeItem;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeLog;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
 import org.loose.fis.project.proofing.tool.utils.TestUtils;
 
 import java.util.Comparator;

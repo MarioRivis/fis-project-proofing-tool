@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 import org.loose.fis.project.proofing.tool.jira.client.JiraPathResolver;
 import org.loose.fis.project.proofing.tool.jira.client.JiraService;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.projects.Project;
 
 import java.lang.reflect.Type;
 import java.util.List;

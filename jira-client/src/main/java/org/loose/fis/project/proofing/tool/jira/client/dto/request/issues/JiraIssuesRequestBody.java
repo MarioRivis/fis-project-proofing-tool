@@ -1,4 +1,4 @@
-package org.loose.fis.project.proofing.tool.jira.client.issues;
+package org.loose.fis.project.proofing.tool.jira.client.dto.request.issues;
 
 import com.google.api.client.util.Key;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class JiraIssuesRequestBodyDTO {
+public class JiraIssuesRequestBody {
     @Key
     private String jql;
     @Key

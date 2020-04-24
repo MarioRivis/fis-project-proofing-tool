@@ -1,6 +1,7 @@
 package org.loose.fis.project.proofing.tool.jira.client.projects;
 
 import org.junit.jupiter.api.Test;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.projects.Project;
 import org.loose.fis.project.proofing.tool.utils.TestUtils;
 
 import java.util.List;

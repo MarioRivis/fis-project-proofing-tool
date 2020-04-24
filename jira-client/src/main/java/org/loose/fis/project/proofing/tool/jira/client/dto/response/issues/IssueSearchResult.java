@@ -1,4 +1,4 @@
-package org.loose.fis.project.proofing.tool.jira.client.issues;
+package org.loose.fis.project.proofing.tool.jira.client.dto.response.issues;
 
 import com.google.api.client.util.Key;
 import lombok.AllArgsConstructor;

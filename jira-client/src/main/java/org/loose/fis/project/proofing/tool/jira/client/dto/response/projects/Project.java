@@ -1,4 +1,4 @@
-package org.loose.fis.project.proofing.tool.jira.client.projects;
+package org.loose.fis.project.proofing.tool.jira.client.dto.response.projects;
 
 import com.google.api.client.util.Key;
 import lombok.Data;

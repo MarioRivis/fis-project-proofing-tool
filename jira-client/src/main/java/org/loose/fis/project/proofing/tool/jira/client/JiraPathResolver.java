@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class JiraPathResolver {
 
-    private static String JIRA_REST_API_PATH = "rest/api/2";
+    private static String JIRA_REST_API_PATH = "rest/api/3";
 
     private String jiraHome;
 

@@ -8,6 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 import org.loose.fis.project.proofing.tool.jira.client.JiraPathResolver;
 import org.loose.fis.project.proofing.tool.jira.client.JiraService;
+import org.loose.fis.project.proofing.tool.jira.client.dto.request.issues.JiraIssuesRequestBody;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueChange;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueSearchResult;
 import org.loose.fis.project.proofing.tool.jira.client.pagination.IssueChangelogUrl;
 
 import java.util.ArrayList;
@@ -83,7 +87,7 @@ public class IssuesService extends JiraService {
     @SneakyThrows
     private IssueSearchResult searchIssues(String apiPath, String jqlQuery, int maxResults, int startAt) {
         HttpResponse httpResponse = httpClient.post(new GenericUrl(apiPath), credentials,
-                new JiraIssuesRequestBodyDTO(jqlQuery, startAt, maxResults, Arrays.asList("changelog")));
+                new JiraIssuesRequestBody(jqlQuery, startAt, maxResults, Arrays.asList("changelog")));
         return httpResponse.parseAs(IssueSearchResult.class);
     }
 
