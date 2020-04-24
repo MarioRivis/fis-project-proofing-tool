@@ -1,5 +1,6 @@
 package org.loose.fis.project.proofing.tool.jira.client.dto.response.issues;
 
+import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
 import lombok.Data;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
@@ -19,7 +20,7 @@ public class IssueFields {
     @Key
     private String summary;
     @Key
-    private String description;
+    private GenericJson description;
     @Key
     private String created;
     @Key

@@ -3,11 +3,13 @@ package org.loose.fis.project.proofing.tool.jira.client.export;
 import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeItem;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueChange;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,7 +31,7 @@ public class ResultExporter {
 
 		List<ExportIssue> exportIssues = issues.stream()
 				.map(issue -> ExportIssue.builder().key(issue.getKey()).id(issue.getId()).self(issue.getSelf())
-						.summary(issue.getSummary()).description(issue.getDescription())
+						.summary(issue.getSummary()).description(getDescription(issue))
 						.status(issue.getStatus().getName()).typeId(issue.getIssuetype().getId())
 						.type(issue.getIssuetype().getName()).created(issue.getCreated()).updated(issue.getUpdated())
 						.creatorId(getUserId(issue.getCreator())).reporterId(getUserId(issue.getReporter()))
@@ -41,6 +43,18 @@ public class ResultExporter {
 				.issues(exportIssues).build();
 
 		Files.write(toPath, Collections.singleton(exportResult.toString()));
+	}
+
+	private String getDescription(Issue issue) {
+		return issue.getChangelog().getChanges().stream()
+				.filter(change -> change.getItems().stream().anyMatch(this::isDescription))
+				.max(Comparator.comparing(IssueChange::getCreated))
+				.flatMap(change -> change.getItems().stream().filter(this::isDescription).findFirst())
+				.map(ChangeItem::getToString).orElse("");
+	}
+
+	private boolean isDescription(ChangeItem item) {
+		return item.getField().equals("description");
 	}
 
 	private List<ExportComment> getComments(Issue issue) {
