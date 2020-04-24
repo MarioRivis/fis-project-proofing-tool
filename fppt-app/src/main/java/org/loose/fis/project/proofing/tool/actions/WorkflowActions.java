@@ -6,6 +6,7 @@ import org.loose.fis.project.proofing.tool.StudentResponse;
 import org.loose.fis.project.proofing.tool.StudentsRegistry;
 import org.loose.fis.project.proofing.tool.github.client.dto.request.repository.contents.CreateFileRequestBody;
 import org.loose.fis.project.proofing.tool.github.client.dto.request.repository.pullrequests.CreatePullRequestBody;
+import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.refs.Ref;
 import org.loose.fis.project.proofing.tool.github.client.repository.contents.GithubContentsService;
 import org.loose.fis.project.proofing.tool.github.client.repository.pullrequests.GithubPullRequestsService;
 import org.loose.fis.project.proofing.tool.github.client.repository.refs.GithubRefsService;
@@ -35,7 +36,7 @@ public class WorkflowActions {
             "Anytime you want to see the result of these runs, you can find them under the Actions tab just on top of the repo page.\n" +
             "Now go ahead and merge this PR! Then make sure your build succeeded on the master branch. If it didn't, fix it, ASAP!!!";
 
-    public static Void createWorkflowFile(String... args) {
+    public static void createWorkflowFile() {
 
         List<StudentResponse> studentResponses = StudentsRegistry.getInstance().getForTeacher();
 
@@ -60,7 +61,7 @@ public class WorkflowActions {
                 return;
             }
 
-            boolean createdBuildActionsBranch = createBuildActionsBranchFor(studentResponse);
+            boolean createdBuildActionsBranch = createBuildActionsBranchFromMasterFor(studentResponse);
             if (!createdBuildActionsBranch) {
                 System.err.println("Aborting workflow creation...");
                 return;
@@ -77,19 +78,16 @@ public class WorkflowActions {
                 System.err.println("Aborting workflow creation...");
                 return;
             }
-
             System.out.printf("SUCCESSFULLY uploaded workflow to repo %s, for %s", studentResponse.getRepoUrl(), studentResponse.getName());
-
         });
-
-        return null;
     }
 
-    private static boolean createBuildActionsBranchFor(StudentResponse studentResponse) {
+    private static boolean createBuildActionsBranchFromMasterFor(StudentResponse studentResponse) {
         GithubRefsService githubRefsService = new GithubRefsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
-        System.out.printf("Creating branch %s for repo %s............", BUILD_ACTIONS_BRANCH, studentResponse.getJiraUrl());
+        System.out.printf("Creating branch %s for repo %s............", BUILD_ACTIONS_BRANCH, studentResponse.getRepoUrl());
         try {
-            githubRefsService.createBranch(BUILD_ACTIONS_BRANCH);
+            Ref master = githubRefsService.getBranch(MASTER);
+            githubRefsService.createBranch(BUILD_ACTIONS_BRANCH, master.getObject().getSha());
             System.out.println("SUCCESSFUL");
             return true;
         } catch (Exception e) {
@@ -128,7 +126,7 @@ public class WorkflowActions {
 
     private static boolean uploadBuildFileFor(StudentResponse studentResponse, CreateFileRequestBody body) {
         GithubContentsService githubContentsService = new GithubContentsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
-        System.out.printf("Uploading %s file on branch %s for repo %s........", BUILD_ACTIONS_BRANCH, studentResponse.getJiraUrl());
+        System.out.printf("Uploading %s file on branch %s for repo %s........", GITHUB_WORKFLOWS_BUILD_YML, BUILD_ACTIONS_BRANCH, studentResponse.getRepoUrl());
 
         try {
             githubContentsService.addFileToRepo(GITHUB_WORKFLOWS_BUILD_YML, body);
@@ -142,7 +140,7 @@ public class WorkflowActions {
 
     private static boolean createPullRequestForBuildActionsBranch(StudentResponse studentResponse) {
         GithubPullRequestsService githubPullRequestsService = new GithubPullRequestsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
-        System.out.printf("Uploading %s file on branch %s for repo %s........", BUILD_ACTIONS_BRANCH, studentResponse.getJiraUrl());
+        System.out.printf("Creating Pull Request branch %s for repo %s........", BUILD_ACTIONS_BRANCH, studentResponse.getRepoUrl());
 
         try {
             githubPullRequestsService.createPullRequest(CreatePullRequestBody.builder()
@@ -159,5 +157,4 @@ public class WorkflowActions {
             return false;
         }
     }
-
 }

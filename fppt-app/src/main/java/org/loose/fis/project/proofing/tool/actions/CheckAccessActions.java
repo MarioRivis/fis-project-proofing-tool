@@ -10,23 +10,20 @@ import java.util.List;
 
 public class CheckAccessActions {
 
-    public static Void checkGithubAccessAction(String... args) {
+    public static void checkGithubAccessAction() {
 
         List<StudentResponse> studentResponses = StudentsRegistry.getInstance().getForTeacher();
 
         studentResponses.forEach(CheckAccessActions::checkGithubAccessForStudentResponse);
-
-        return null;
     }
 
-    public static Object checkJiraAccessAction(String... args) {
+    public static void checkJiraAccessAction() {
         List<StudentResponse> studentResponses = StudentsRegistry.getInstance().getForTeacher();
 
         studentResponses.forEach(CheckAccessActions::checkJiraAccessForStudentResponse);
-        return null;
     }
 
-    public static Object checkAccessAction(String... args) {
+    public static void checkAccessAction() {
         List<StudentResponse> studentResponses = StudentsRegistry.getInstance().getForTeacher();
 
         studentResponses.forEach(studentResponse -> {
@@ -34,7 +31,6 @@ public class CheckAccessActions {
             checkJiraAccessForStudentResponse(studentResponse);
             System.out.println();
         });
-        return null;
     }
 
     static boolean checkGithubAccessForStudentResponse(StudentResponse studentResponse) {

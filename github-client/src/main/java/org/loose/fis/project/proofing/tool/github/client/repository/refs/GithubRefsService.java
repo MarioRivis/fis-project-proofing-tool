@@ -47,12 +47,12 @@ public class GithubRefsService extends GithubRepositoryService {
         return httpResponse.parseAs(Ref.class);
     }
 
-    public Ref createBranch(String branchName) {
-        return getRef("refs/heads/" + branchName);
+    public Ref createBranch(String branchName, String sha) {
+        return createRef("refs/heads/" + branchName, sha);
     }
 
-    public Ref createTag(String tagName) {
-        return getRef("refs/tags/" + tagName);
+    public Ref createTag(String tagName, String sha) {
+        return createRef("refs/tags/" + tagName, sha);
     }
 
 }

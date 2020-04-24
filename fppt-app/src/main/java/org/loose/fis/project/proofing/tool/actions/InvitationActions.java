@@ -16,7 +16,7 @@ public class InvitationActions {
 
     private static GithubInvitationService githubInvitationService = new GithubInvitationService(Config.getGithubCredentials());
 
-    public static Void listInvitations(String... args) {
+    public static void listInvitations() {
         Map<Boolean, List<Invitation>> existenceToInvitations = getBooleanListMap();
 
         List<Invitation> existingInvitations = existenceToInvitations.get(Boolean.TRUE);
@@ -25,10 +25,9 @@ public class InvitationActions {
         existingInvitations.forEach(invitation -> System.out.println(formatInvitation(invitation)));
 
         writeFailedInvitations(failedInvitations);
-        return null;
     }
 
-    public static Void acceptInvitations(String... args) {
+    public static void acceptInvitations() {
         Map<Boolean, List<Invitation>> existenceToInvitations = getBooleanListMap();
 
         List<Invitation> existingInvitations = existenceToInvitations.get(Boolean.TRUE);
@@ -49,9 +48,7 @@ public class InvitationActions {
         writeFailedInvitations(failedInvitations);
 
         System.out.println("\n\nChecking access to the repositories:\n\n");
-        CheckAccessActions.checkGithubAccessAction(args);
-
-        return null;
+        CheckAccessActions.checkGithubAccessAction();
     }
 
     private static void writeFailedInvitations(List<Invitation> failedInvitations) {
