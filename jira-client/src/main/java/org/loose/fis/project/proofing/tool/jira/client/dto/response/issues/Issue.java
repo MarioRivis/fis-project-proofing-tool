@@ -9,16 +9,23 @@ import org.apache.commons.collections4.CollectionUtils;
 @Data
 public class Issue extends GenericJson {
 
-    @Key
-    private String key;
-    @Key
-    @Delegate
-    private IssueFields fields;
+	@Key
+	private String key;
 
-    @Key
-    private ChangeLog changelog;
+	@Key
+	private String id;
 
-    public boolean hasSubtasks() {
-        return CollectionUtils.isNotEmpty(fields.getSubtasks());
-    }
+	@Key
+	private String self;
+
+	@Key
+	@Delegate
+	private IssueFields fields;
+
+	@Key
+	private ChangeLog changelog;
+
+	public boolean hasSubtasks() {
+		return CollectionUtils.isNotEmpty(fields.getSubtasks());
+	}
 }

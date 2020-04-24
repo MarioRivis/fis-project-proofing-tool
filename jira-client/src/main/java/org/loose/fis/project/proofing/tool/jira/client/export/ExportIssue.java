@@ -1,12 +1,13 @@
 package org.loose.fis.project.proofing.tool.jira.client.export;
 
-import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class ExportIssue {
     /**
      * The Issue Key, composed of the project id and the number of the issue
@@ -34,7 +35,7 @@ public class ExportIssue {
      * The issue description in markup language
      */
     @Key
-    private GenericJson description;
+    private String description;
     /**
      * The current status of the Issue
      */
@@ -62,6 +63,18 @@ public class ExportIssue {
      */
     @Key
     private String updated;
+
+	/**
+	 * The name of the issues priority
+	 */
+    @Key
+	private String priority;
+    @Key
+	private String creatorId;
+    @Key
+	private String assigneeId;
+    @Key
+	private String reporterId;
     /**
      * A list with all the Keys of the issue's sub-tasks
      */

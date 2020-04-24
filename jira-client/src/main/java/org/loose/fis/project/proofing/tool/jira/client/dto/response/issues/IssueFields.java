@@ -2,6 +2,7 @@ package org.loose.fis.project.proofing.tool.jira.client.dto.response.issues;
 
 import com.google.api.client.util.Key;
 import lombok.Data;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
 
 import java.util.List;
 
@@ -25,4 +26,12 @@ public class IssueFields {
     private String updated;
     @Key
     private List<Issue> subtasks;
+    @Key
+    private IssuePriority priority;
+    @Key
+    private User creator;
+    @Key
+    private User reporter;
+    @Key
+    private User assignee;
 }

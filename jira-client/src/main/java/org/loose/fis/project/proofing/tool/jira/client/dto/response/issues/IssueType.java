@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class IssueType {
     @Key
+    private String id;
+    @Key
     private String name;
     @Key
     private String description;

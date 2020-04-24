@@ -19,7 +19,7 @@ class IssuesServiceTest {
 
     private static final String JIRA_HOME = "https://loose.atlassian.net";
 
-    private IssuesService issuesService = new IssuesService(JIRA_HOME, TestUtils.getJiraCredentials());
+    private final IssuesService issuesService = new IssuesService(JIRA_HOME, TestUtils.getJiraCredentials());
 
     @Test
     void getAllIssuesForProjects() {
@@ -43,25 +43,29 @@ class IssuesServiceTest {
 
     @Test
     void testGetChangesForAllIssues() {
-        List<Issue> issues = issuesService.getAllIssuesForProjects("SM");
+        List<Issue> issues = getIssuesWithChanges();
 
+        issues.forEach(issue -> {
+            System.out.println(String.format("%s: %s", issue.getKey(), issue.getSummary()));
+            issue.getChangelog().getChanges().stream().filter(issueChange -> issueChange.getItems().stream()
+                    .anyMatch(changeItem -> "status".equalsIgnoreCase(changeItem.getField()))).forEach(issueChange -> {
+                Optional<ChangeItem> first = issueChange.getItems().stream()
+                        .filter(changeItem -> "status".equalsIgnoreCase(changeItem.getField())).findFirst();
+                first.ifPresent(changeItem -> System.out.println(
+                        String.format("\t%s: [%s] -> [%s]", issueChange.getCreated(), changeItem.getFromString(),
+                                changeItem.getToString())));
+            });
+        });
+    }
+
+    private List<Issue> getIssuesWithChanges() {
+        List<Issue> issues = issuesService.getAllIssuesForProjects("SM");
 
         issues.forEach(issue -> {
             ChangeLog changeLog = new ChangeLog();
             changeLog.setChanges(issuesService.getChangeLogForIssue(issue.getKey()));
             issue.setChangelog(changeLog);
         });
-
-        issues.stream().forEach(issue -> {
-            System.out.println(String.format("%s: %s", issue.getKey(), issue.getSummary()));
-            issue.getChangelog().getChanges().stream()
-                    .filter(issueChange -> issueChange.getItems().stream().anyMatch(changeItem -> "status".equalsIgnoreCase(changeItem.getField())))
-                    .forEach(issueChange -> {
-                        Optional<ChangeItem> first = issueChange.getItems().stream().filter(changeItem -> "status".equalsIgnoreCase(changeItem.getField())).findFirst();
-                        first.ifPresent(
-                                changeItem -> System.out.println(String.format("\t%s: [%s] -> [%s]", issueChange.getCreated(), changeItem.getFromString(), changeItem.getToString()))
-                        );
-                    });
-        });
+        return issues;
     }
 }
