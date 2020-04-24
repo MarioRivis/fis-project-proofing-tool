@@ -8,8 +8,14 @@ import java.math.BigDecimal;
 
 @Data
 public class Invitation extends GenericJson {
-
     @Key
     private BigDecimal id;
+    @Key
+    private GenericJson repository;
+    @Key
+    private String permissions;
 
+    public String getRepoUrl() {
+        return (String) getRepository().get("html_url");
+    }
 }

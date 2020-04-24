@@ -23,5 +23,18 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.loose</groupId>
+            <artifactId>github-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.loose</groupId>
+            <artifactId>jira-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

@@ -2,6 +2,7 @@ package org.loose.fis.project.proofing.tool.jira.client.projects;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
@@ -29,6 +30,16 @@ public class ProjectsService extends JiraService {
         }.getType();
 
         return (List<Project>) httpResponse.parseAs(type);
+    }
+
+    @SneakyThrows
+    public Project getProject(String projectKey) {
+
+        String apiPath = new JiraPathResolver(jiraHome).getApiPath(ImmutableMap.of("projectKey", projectKey), "project", ":projectKey");
+
+        HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath), credentials);
+
+        return httpResponse.parseAs(Project.class);
     }
 
 }
