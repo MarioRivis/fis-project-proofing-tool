@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -84,4 +85,6 @@ public class ExportIssue {
     private List<ExportChange> changes;
     @Key
     private List<ExportComment> comments;
+    @Key
+    private Map<String, Object> customFields;
 }

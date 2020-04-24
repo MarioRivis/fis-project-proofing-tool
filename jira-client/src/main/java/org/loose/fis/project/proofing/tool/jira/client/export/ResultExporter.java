@@ -4,20 +4,18 @@ import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeItem;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueChange;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueField;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ResultExporter {
 	@SneakyThrows
-	public void export(List<Issue> issues, Path toPath) {
+	public void export(List<Issue> issues, List<IssueField> customFields, Path toPath) {
 		List<ExportUser> exportUsers = issues.stream()
 				.flatMap(issue -> Stream.of(issue.getCreator(), issue.getReporter(), issue.getAssignee()))
 				.filter(Objects::nonNull).distinct()
@@ -37,12 +35,17 @@ public class ResultExporter {
 						.creatorId(getUserId(issue.getCreator())).reporterId(getUserId(issue.getReporter()))
 						.assigneeId(getUserId(issue.getAssignee())).priority(issue.getPriority().getName())
 						.subTasks(issue.getSubtasks().stream().map(Issue::getId).collect(Collectors.toList()))
-						.changes(getChanges(issue)).comments(getComments(issue)).build()).collect(Collectors.toList());
+						.changes(getChanges(issue)).comments(getComments(issue))
+						.customFields(getCustomFields(issue, customFields)).build()).collect(Collectors.toList());
 
 		ExportResult exportResult = ExportResult.builder().users(exportUsers).issueTypes(exportIssueTypes)
 				.issues(exportIssues).build();
 
 		Files.write(toPath, Collections.singleton(exportResult.toString()));
+	}
+
+	private Map<String, Object> getCustomFields(Issue issue, List<IssueField> customFields) {
+		return customFields.stream().collect(Collectors.toMap(IssueField::getName, field -> issue.get(field.getId())));
 	}
 
 	private String getDescription(Issue issue) {
