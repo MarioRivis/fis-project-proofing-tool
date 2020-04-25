@@ -88,6 +88,12 @@ public class ExportIssue {
      */
     @Key
 	private String reporterId;
+
+    /**
+     * The key of the parent issue
+     */
+    @Key
+    private String parent;
     /**
      * A list with all the Keys of the issue's sub-tasks
      */

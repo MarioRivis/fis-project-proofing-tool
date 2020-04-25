@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,10 +60,17 @@ public class ResultExporter {
 						.type(issue.getIssuetype().getName()).created(issue.getCreated()).updated(issue.getUpdated())
 						.creatorId(getUserId(issue.getCreator())).reporterId(getUserId(issue.getReporter()))
 						.assigneeId(getUserId(issue.getAssignee())).priority(issue.getPriority().getName())
-						.subTasks(issue.getSubtasks().stream().map(Issue::getKey).collect(Collectors.toList()))
-						.changes(getChanges(issue)).comments(getComments(issue))
-						.timeEstimate(issue.getTimeestimate())
+						.parent(getParent(issue)).subTasks(getSubtasks(issue)).changes(getChanges(issue))
+						.comments(getComments(issue)).timeEstimate(issue.getTimeestimate())
 						.customFields(getCustomFields(issue, customFields)).build()).collect(Collectors.toList());
+	}
+
+	private List<String> getSubtasks(Issue issue) {
+		return issue.getSubtasks().stream().map(Issue::getKey).collect(Collectors.toList());
+	}
+
+	private String getParent(Issue issue) {
+		return Optional.ofNullable(issue.getParent()).map(Issue::getKey).orElse(null);
 	}
 
 	private Map<String, Object> getCustomFields(Issue issue, List<IssueField> customFields) {
