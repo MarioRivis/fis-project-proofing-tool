@@ -59,7 +59,7 @@ public class ResultExporter {
 						.type(issue.getIssuetype().getName()).created(issue.getCreated()).updated(issue.getUpdated())
 						.creatorId(getUserId(issue.getCreator())).reporterId(getUserId(issue.getReporter()))
 						.assigneeId(getUserId(issue.getAssignee())).priority(issue.getPriority().getName())
-						.subTasks(issue.getSubtasks().stream().map(Issue::getId).collect(Collectors.toList()))
+						.subTasks(issue.getSubtasks().stream().map(Issue::getKey).collect(Collectors.toList()))
 						.changes(getChanges(issue)).comments(getComments(issue))
 						.timeEstimate(issue.getTimeestimate())
 						.customFields(getCustomFields(issue, customFields)).build()).collect(Collectors.toList());
