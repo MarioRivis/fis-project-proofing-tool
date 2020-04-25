@@ -9,11 +9,11 @@ public class ExportComment {
     @Key
     private String created;
     @Key
-    private String authorId;
+    private String userId;
     @Key
     private String updated;
     @Key
-    private String updateAuthorId;
+    private String updateUserId;
     @Key
     private GenericJson body;
 }
