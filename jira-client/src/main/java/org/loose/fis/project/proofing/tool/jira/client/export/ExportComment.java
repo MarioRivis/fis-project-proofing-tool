@@ -1,10 +1,11 @@
 package org.loose.fis.project.proofing.tool.jira.client.export;
 
-import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.Key;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ExportComment {
     @Key
     private String created;
@@ -15,5 +16,5 @@ public class ExportComment {
     @Key
     private String updateUserId;
     @Key
-    private GenericJson body;
+    private String body;
 }

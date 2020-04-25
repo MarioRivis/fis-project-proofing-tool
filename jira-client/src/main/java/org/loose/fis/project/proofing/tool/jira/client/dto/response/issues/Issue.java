@@ -4,6 +4,9 @@ import com.google.api.client.util.Key;
 import lombok.Data;
 import lombok.experimental.Delegate;
 import org.apache.commons.collections4.CollectionUtils;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.comments.IssueComment;
+
+import java.util.List;
 
 @Data
 public class Issue {
@@ -23,6 +26,9 @@ public class Issue {
 
 	@Key
 	private ChangeLog changelog;
+
+	@Key
+	private List<IssueComment> comments;
 
 	public boolean hasSubtasks() {
 		return CollectionUtils.isNotEmpty(fields.getSubtasks());

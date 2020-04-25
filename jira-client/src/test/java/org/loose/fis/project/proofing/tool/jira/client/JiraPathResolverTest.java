@@ -13,8 +13,16 @@ class JiraPathResolverTest {
     JiraPathResolver jiraPathResolver;
 
     @Test
-    void getApiPath() {
+    void getApiPathWithDefaultVersion() {
         jiraPathResolver = new JiraPathResolver(JIRA_HOME);
+        Map<String, String> map = ImmutableMap.of("projectKey", "SM");
+
+        assertEquals("https://loose.atlassian.net/rest/api/3/project/SM/properties", jiraPathResolver.getApiPath(map, "project", ":projectKey", "properties"));
+    }
+
+    @Test
+    void getApiPathWithCustomVersion() {
+        jiraPathResolver = new JiraPathResolver(JIRA_HOME, "2");
         Map<String, String> map = ImmutableMap.of("projectKey", "SM");
 
         assertEquals("https://loose.atlassian.net/rest/api/2/project/SM/properties", jiraPathResolver.getApiPath(map, "project", ":projectKey", "properties"));

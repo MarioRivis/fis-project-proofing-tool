@@ -2,10 +2,8 @@ package org.loose.fis.project.proofing.tool.jira.client.export;
 
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.ChangeItem;
-import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
-import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueChange;
-import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.IssueField;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.*;
+import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.comments.IssueComment;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.users.User;
 import org.loose.fis.project.proofing.tool.utils.JsonMapper;
 
@@ -86,11 +84,19 @@ public class ResultExporter {
 	}
 
 	private List<ExportComment> getComments(Issue issue) {
-		return emptyList();
+		List<IssueComment> comments = issue.getComments();
+		if (comments == null)
+			return emptyList();
+		return comments.stream().map(comment -> ExportComment.builder().userId(comment.getAuthor().getAccountId())
+				.created(comment.getCreated()).updateUserId(comment.getUpdateAuthor().getAccountId())
+				.updated(comment.getUpdated()).body(comment.getBody()).build()).collect(Collectors.toList());
 	}
 
 	private List<ExportChange> getChanges(Issue issue) {
-		return issue.getChangelog().getChanges().stream()
+		ChangeLog changelog = issue.getChangelog();
+		if (changelog == null)
+			return emptyList();
+		return changelog.getChanges().stream()
 				.map(change -> ExportChange.builder().id(change.getId()).userId(change.getAuthor().getAccountId())
 						.created(change.getCreated()).changedFields(
 								change.getItems().stream().map(ChangeItem::getField).collect(Collectors.toList()))

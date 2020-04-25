@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
+
 @Slf4j
 public class IssuesService extends JiraService {
 
@@ -87,7 +89,7 @@ public class IssuesService extends JiraService {
     @SneakyThrows
     private IssueSearchResult searchIssues(String apiPath, String jqlQuery, int maxResults, int startAt) {
         HttpResponse httpResponse = httpClient.post(new GenericUrl(apiPath), credentials,
-                new JiraIssuesRequestBody(jqlQuery, startAt, maxResults, Arrays.asList("changelog")));
+                new JiraIssuesRequestBody(jqlQuery, startAt, maxResults, singletonList("changelog")));
         return httpResponse.parseAs(IssueSearchResult.class);
     }
 
