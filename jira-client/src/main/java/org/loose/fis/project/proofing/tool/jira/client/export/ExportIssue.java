@@ -108,4 +108,9 @@ public class ExportIssue {
      */
     @Key
     private Map<String, Object> customFields;
+    /**
+     * Initial time estimate in seconds
+     */
+    @Key
+    private Long timeEstimate;
 }

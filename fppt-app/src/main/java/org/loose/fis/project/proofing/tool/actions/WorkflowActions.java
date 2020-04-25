@@ -44,42 +44,46 @@ public class WorkflowActions {
             boolean gitAccess = CheckAccessActions.checkGithubAccessForStudentResponse(studentResponse);
             boolean jiraAccess = CheckAccessActions.checkJiraAccessForStudentResponse(studentResponse);
             if (!gitAccess || !jiraAccess) {
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
 
             boolean createdJiraSecret = UploadSecretAction.createJiraTokenSecretFor(studentResponse);
             if (!createdJiraSecret) {
                 System.err.println("Could not upload Jira Secret!!!");
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
 
             CreateFileRequestBody contentBody = createContentBodyFor(studentResponse);
             if (contentBody == null) {
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
 
             boolean createdBuildActionsBranch = createBuildActionsBranchFromMasterFor(studentResponse);
             if (!createdBuildActionsBranch) {
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
 
             boolean uploadedFileToBranch = uploadBuildFileFor(studentResponse, contentBody);
             if (!uploadedFileToBranch) {
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
 
             boolean createdPR = createPullRequestForBuildActionsBranch(studentResponse);
             if (!createdPR) {
-                System.err.println("Aborting workflow creation...");
+                printAbortWorkflow();
                 return;
             }
-            System.out.printf("SUCCESSFULLY uploaded workflow to repo %s, for %s", studentResponse.getRepoUrl(), studentResponse.getName());
+            System.out.printf("SUCCESSFULLY uploaded workflow to repo %s, for %s\n\n", studentResponse.getRepoUrl(), studentResponse.getName());
         });
+    }
+
+    private static void printAbortWorkflow() {
+        System.err.println("Aborting workflow creation...\n");
     }
 
     private static boolean createBuildActionsBranchFromMasterFor(StudentResponse studentResponse) {

@@ -37,4 +37,6 @@ public class IssueFields extends GenericJson {
     private User reporter;
     @Key
     private User assignee;
+    @Key
+    private Long timeestimate;
 }

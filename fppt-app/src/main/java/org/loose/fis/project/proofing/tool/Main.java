@@ -1,9 +1,6 @@
 package org.loose.fis.project.proofing.tool;
 
-import org.loose.fis.project.proofing.tool.actions.CheckAccessActions;
-import org.loose.fis.project.proofing.tool.actions.Command;
-import org.loose.fis.project.proofing.tool.actions.InvitationActions;
-import org.loose.fis.project.proofing.tool.actions.WorkflowActions;
+import org.loose.fis.project.proofing.tool.actions.*;
 import org.loose.fis.project.proofing.tool.exceptions.FeatureUnavailableException;
 import org.loose.fis.project.proofing.tool.exceptions.IllegalCommandException;
 
@@ -21,6 +18,7 @@ public class Main {
         actionsMap.put(Command.CHECK_JIRA_ACCESS, CheckAccessActions::checkJiraAccessAction);
         actionsMap.put(Command.CHECK_ACCESS, CheckAccessActions::checkAccessAction);
         actionsMap.put(Command.UPLOAD_WORKFLOW, WorkflowActions::createWorkflowFile);
+        actionsMap.put(Command.GET_JIRA_SUMMARY, JiraActions::getJiraSummary);
     }
 
     public static void main(String[] args) {

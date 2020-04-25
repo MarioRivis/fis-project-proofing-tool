@@ -20,24 +20,41 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 
 public class ResultExporter {
+
+	public static final String AVATAR_RESOLUTION = "32x32";
+	public static final String DESCRIPTION = "description";
+
 	public void export(List<Issue> issues, Path toPath) {
 		export(issues, toPath, emptyList());
 	}
 
 	@SneakyThrows
 	public void export(List<Issue> issues, Path toPath, List<IssueField> customFields) {
+		ExportResult exportResult = getExportResult(issues, customFields);
+
+		new JsonMapper().writeJSON(new FileWriter(toPath.toFile()), exportResult);
+	}
+
+	public ExportResult getExportResult(List<Issue> issues, List<IssueField> customFields) {
 		List<ExportUser> exportUsers = issues.stream()
 				.flatMap(issue -> Stream.of(issue.getCreator(), issue.getReporter(), issue.getAssignee()))
 				.filter(user -> user.getAccountId() != null).distinct()
 				.map(user -> ExportUser.builder().id(user.getAccountId()).name(user.getDisplayName())
-						.avatarUrl((String) user.getAvatarUrls().get("32x32")).build()).collect(Collectors.toList());
+						.avatarUrl((String) user.getAvatarUrls().get(AVATAR_RESOLUTION)).build()).collect(Collectors.toList());
 
 		List<ExportIssueType> exportIssueTypes = issues.stream().map(Issue::getIssuetype).distinct()
 				.map(type -> ExportIssueType.builder().id(type.getId()).name(type.getName())
 						.description(type.getDescription()).isSubTask(type.isSubTask()).build())
 				.collect(Collectors.toList());
 
-		List<ExportIssue> exportIssues = issues.stream()
+		List<ExportIssue> exportIssues = getExportIssues(issues, customFields);
+
+		return ExportResult.builder().users(exportUsers).issueTypes(exportIssueTypes)
+				.issues(exportIssues).build();
+	}
+
+	private List<ExportIssue> getExportIssues(List<Issue> issues, List<IssueField> customFields) {
+		return issues.stream()
 				.map(issue -> ExportIssue.builder().key(issue.getKey()).id(issue.getId()).self(issue.getSelf())
 						.summary(issue.getSummary()).description(getDescription(issue))
 						.status(issue.getStatus().getName()).typeId(issue.getIssuetype().getId())
@@ -46,12 +63,8 @@ public class ResultExporter {
 						.assigneeId(getUserId(issue.getAssignee())).priority(issue.getPriority().getName())
 						.subTasks(issue.getSubtasks().stream().map(Issue::getId).collect(Collectors.toList()))
 						.changes(getChanges(issue)).comments(getComments(issue))
+						.timeEstimate(issue.getTimeestimate())
 						.customFields(getCustomFields(issue, customFields)).build()).collect(Collectors.toList());
-
-		ExportResult exportResult = ExportResult.builder().users(exportUsers).issueTypes(exportIssueTypes)
-				.issues(exportIssues).build();
-
-		new JsonMapper().writeJSON(new FileWriter(toPath.toFile()), exportResult);
 	}
 
 	private Map<String, Object> getCustomFields(Issue issue, List<IssueField> customFields) {
@@ -69,7 +82,7 @@ public class ResultExporter {
 	}
 
 	private boolean isDescription(ChangeItem item) {
-		return item.getField().equals("description");
+		return item.getField().equals(DESCRIPTION);
 	}
 
 	private List<ExportComment> getComments(Issue issue) {
