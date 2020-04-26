@@ -35,7 +35,7 @@ public class CheckAccessActions {
 
     static boolean checkGithubAccessForStudentResponse(StudentResponse studentResponse) {
         GithubSecretsService githubSecretsService = new GithubSecretsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
-        System.out.printf("Checking Github access to %s [%s]............", studentResponse.getRepoUrl(), studentResponse.getName());
+        System.out.printf("Checking Github access to %s [%s]-[%d]............", studentResponse.getRepoUrl(), studentResponse.getName(), studentResponse.getId());
         try {
             githubSecretsService.listAllSecretsForRepo();
             System.out.println("SUCCESSFUL");
@@ -48,7 +48,7 @@ public class CheckAccessActions {
 
     static boolean checkJiraAccessForStudentResponse(StudentResponse studentResponse) {
         ProjectsService projectsService = new ProjectsService(studentResponse.getJiraUrl(), Config.getJiraCredentials());
-        System.out.printf("Checking Jira access to %s [%s] for %s............", studentResponse.getJiraUrl(), studentResponse.getJiraProjectId(), studentResponse.getName());
+        System.out.printf("Checking Jira access to %s [%s] for %s [%d]............", studentResponse.getJiraUrl(), studentResponse.getJiraProjectId(), studentResponse.getName(), studentResponse.getId());
         try {
             projectsService.getProject(studentResponse.getJiraProjectId());
             System.out.println("SUCCESSFUL");

@@ -57,7 +57,7 @@ public class StudentsRegistry {
     private boolean filterCurrentStudentsIfAny(StudentResponse studentResponse) {
         if (currentStudents.isEmpty())
             return true;
-        return currentStudents.contains(studentResponse.getName());
+        return currentStudents.contains("" + studentResponse.getId());
     }
 
     private void loadCurrentStudents() {

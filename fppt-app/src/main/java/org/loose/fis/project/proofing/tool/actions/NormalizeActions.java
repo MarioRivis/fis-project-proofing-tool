@@ -23,13 +23,13 @@ public class NormalizeActions {
 
             String[] split = jiraUrl.split(atlassianRegex);
             if (split.length != 2 || !jiraUrl.startsWith(prefix)) {
-                System.err.printf("Url [%s] from %s does not match the expected format!\n", jiraUrl, studentResponse.getName());
+                System.err.printf("Url [%s] from %s-[%d] does not match the expected format!\n", jiraUrl, studentResponse.getName(), studentResponse.getId());
                 return;
             }
             String normalizedUrl = split[0] + suffix;
 
             if (!jiraUrl.equalsIgnoreCase(normalizedUrl)) {
-                System.out.printf("Modified for %s from [%s] to [%s]\n", studentResponse.getName(), jiraUrl, normalizedUrl);
+                System.out.printf("Modified for %s-[%d] from [%s] to [%s]\n", studentResponse.getName(), studentResponse.getId(), jiraUrl, normalizedUrl);
                 studentResponse.setJiraUrl(normalizedUrl);
             }
         });
@@ -44,7 +44,7 @@ public class NormalizeActions {
             String repoUrl = studentResponse.getRepoUrl();
             String githubUrlPrefix = "https://github.com/";
             if (!repoUrl.startsWith(githubUrlPrefix)) {
-                System.err.printf("Url [%s] from %s does not match the expected format!\n", repoUrl, studentResponse.getName());
+                System.err.printf("Url [%s] from %s [%d] does not match the expected format!\n", repoUrl, studentResponse.getName(), studentResponse.getId());
                 return;
             }
             String afterPrefix = repoUrl.replace(githubUrlPrefix, "");
@@ -56,7 +56,7 @@ public class NormalizeActions {
 
             String[] pathVariables = afterPrefix.split("/");
             if (pathVariables.length < 2) {
-                System.err.printf("Url [%s] from %s does not match the expected format!\n", repoUrl, studentResponse.getName());
+                System.err.printf("Url [%s] from %s [%d] does not match the expected format!\n", repoUrl, studentResponse.getName(), studentResponse.getId());
                 return;
             } else if (pathVariables.length > 2) {
                 modified = true;
@@ -65,7 +65,7 @@ public class NormalizeActions {
 
             if (modified) {
                 String normalizedUrl = githubUrlPrefix + afterPrefix;
-                System.out.printf("Modified for %s from [%s] to [%s]\n", studentResponse.getName(), repoUrl, normalizedUrl);
+                System.out.printf("Modified for %s-[%d] from [%s] to [%s]\n", studentResponse.getName(), studentResponse.getId(), repoUrl, normalizedUrl);
                 studentResponse.setRepoUrl(normalizedUrl);
             }
         });

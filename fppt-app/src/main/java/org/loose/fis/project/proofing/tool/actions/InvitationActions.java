@@ -36,16 +36,16 @@ public class InvitationActions {
         List<Invitation> existingInvitations = existenceToInvitations.get(Boolean.TRUE);
         List<Invitation> failedInvitations = existenceToInvitations.get(Boolean.FALSE);
 
-        List<String> acceptedInviteStudentNames = new ArrayList<>();
+        List<Integer> acceptedInviteStudentIds = new ArrayList<>();
 
         if (existingInvitations != null)
             existingInvitations.forEach(invitation -> {
                 String repoUrl = invitation.getRepoUrl();
                 StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
-                System.out.printf("Accepting invite for %s [%s]...", repoUrl, studentResponse.getName());
+                System.out.printf("Accepting invite for %s [%s]-[%d]...", repoUrl, studentResponse.getName(), studentResponse.getId());
                 try {
                     githubInvitationService.acceptInvitation(invitation);
-                    acceptedInviteStudentNames.add(studentResponse.getName());
+                    acceptedInviteStudentIds.add(studentResponse.getId());
                     System.out.println("SUCCESSFUL");
                 } catch (Exception e) {
                     System.out.println("FAILED");
@@ -59,7 +59,7 @@ public class InvitationActions {
         writeFailedInvitations(failedInvitations);
 
         System.out.println("\n\nAccepted invitations for the following students:");
-        acceptedInviteStudentNames.forEach(System.out::println);
+        acceptedInviteStudentIds.forEach(System.out::println);
         System.err.println("{SUGGESTION}: Maybe you want to copy them to the currentStudents.txt file");
 
         System.out.println("\n\nChecking access to the repositories:\n\n");
@@ -96,6 +96,6 @@ public class InvitationActions {
         String repoUrl = invitation.getRepoUrl();
         StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
 
-        return String.format("[%s] -> %s -> %s -> %s", invitation.getPermissions(), studentResponse.getProjectTitle(), studentResponse.getName(), repoUrl);
+        return String.format("[%s] -> %s -> %s [%d] -> %s", invitation.getPermissions(), studentResponse.getProjectTitle(), studentResponse.getName(), studentResponse.getId(), repoUrl);
     }
 }

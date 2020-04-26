@@ -41,7 +41,7 @@ public class JiraActions {
                 if (!access)
                     throw new RuntimeException("Could not access " + studentResponse.getJiraUrl());
 
-                System.out.printf("Getting issues for $s [%s]......\n", studentResponse.getName(), studentResponse.getRepoUrl());
+                System.out.printf("Getting issues for %s-[%d] [%s]......\n", studentResponse.getName(), studentResponse.getId(), studentResponse.getRepoUrl());
 
                 IssuesService issuesService = new IssuesService(studentResponse.getJiraUrl(), Config.getJiraCredentials());
                 IssueFieldsService issueFieldsService = new IssueFieldsService(studentResponse.getJiraUrl(), Config.getJiraCredentials());

@@ -78,7 +78,7 @@ public class WorkflowActions {
                 printAbortWorkflow();
                 return;
             }
-            System.out.printf("SUCCESSFULLY uploaded workflow to repo %s, for %s\n\n", studentResponse.getRepoUrl(), studentResponse.getName());
+            System.out.printf("SUCCESSFULLY uploaded workflow to repo %s, for %s [%d]\n\n", studentResponse.getRepoUrl(), studentResponse.getName(), studentResponse.getId());
         });
     }
 
