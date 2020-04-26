@@ -4,17 +4,18 @@ import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Config {
 
-    public static final String FORM_NAME = "Form1";
     private static final String JIRA_TOKEN = "jira.token";
     private static final String JIRA_USERNAME = "jira.username";
     private static final String GITHUB_USERNAME = "github.username";
     private static final String GITHUB_TOKEN = "github.token";
     private static final String FPPT_PROPERTIES = "fppt.properties";
+    private static final String CURRENT_STUDENTS = "currentStudents.txt";
     private static final String STUDENT_RESPONSES = "studentResponses";
     private static final String TEACHER_FIELD = "teacher";
 
@@ -58,5 +59,9 @@ public class Config {
 
     public static String getJiraToken() {
         return getProperty(JIRA_TOKEN);
+    }
+
+    public static Path getCurrentStudentPath() {
+        return Paths.get(".", "config", CURRENT_STUDENTS);
     }
 }

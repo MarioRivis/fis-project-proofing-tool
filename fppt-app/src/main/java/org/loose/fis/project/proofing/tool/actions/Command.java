@@ -12,8 +12,10 @@ public enum Command {
     CHECK_JIRA_ACCESS("checkJiraAccess"),
     UPLOAD_WORKFLOW("uploadWorkflow"),
     CHECK_WORKFLOW("checkWorkflow"),
-    GET_JIRA_SUMMARY("getGitSummary"),
-    GET_GIT_SUMMARY("getJiraSummary");
+    GET_JIRA_SUMMARY("getJiraSummary"),
+    GET_GIT_SUMMARY("getGitSummary"),
+    NORMALIZE_JIRA_URLS("normalizeJira"),
+    NORMALIZE_GITHUB_URLS("normalizeGit");
 
     private final String name;
 

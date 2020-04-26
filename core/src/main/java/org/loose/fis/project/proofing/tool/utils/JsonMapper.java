@@ -5,6 +5,7 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.*;
+import java.lang.reflect.Type;
 
 public class JsonMapper {
 
@@ -19,6 +20,18 @@ public class JsonMapper {
     }
 
     public <T> T readJSON(Reader reader, Class<T> type) throws IOException {
+        return new JsonObjectParser(jsonFactory).parseAndClose(reader, type);
+    }
+
+    public Object readJSON(String jsonString, Type type) throws IOException {
+        return new JsonObjectParser(jsonFactory).parseAndClose(new StringReader(jsonString), type);
+    }
+
+    public Object readJSONfromFile(File file, Type type) throws IOException {
+        return new JsonObjectParser(jsonFactory).parseAndClose(new FileReader(file), type);
+    }
+
+    public Object readJSON(Reader reader, Type type) throws IOException {
         return new JsonObjectParser(jsonFactory).parseAndClose(reader, type);
     }
 

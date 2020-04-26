@@ -7,6 +7,7 @@ import org.loose.fis.project.proofing.tool.StudentsRegistry;
 import org.loose.fis.project.proofing.tool.github.client.dto.response.invitations.Invitation;
 import org.loose.fis.project.proofing.tool.github.client.invitations.GithubInvitationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +23,9 @@ public class InvitationActions {
         List<Invitation> existingInvitations = existenceToInvitations.get(Boolean.TRUE);
         List<Invitation> failedInvitations = existenceToInvitations.get(Boolean.FALSE);
 
-        existingInvitations.forEach(invitation -> System.out.println(formatInvitation(invitation)));
+        if (existingInvitations != null)
+            existingInvitations.forEach(invitation -> System.out.println(formatInvitation(invitation)));
+        printNoInvitations();
 
         writeFailedInvitations(failedInvitations);
     }
@@ -33,22 +36,40 @@ public class InvitationActions {
         List<Invitation> existingInvitations = existenceToInvitations.get(Boolean.TRUE);
         List<Invitation> failedInvitations = existenceToInvitations.get(Boolean.FALSE);
 
-        existingInvitations.forEach(invitation -> {
-            String repoUrl = invitation.getRepoUrl();
-            StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
-            System.out.printf("Accepting invite for %s [%s]...", repoUrl, studentResponse.getName());
-            try {
-                githubInvitationService.acceptInvitation(invitation);
-                System.out.println("SUCCESSFUL");
-            } catch (Exception e) {
-                System.out.println("FAILED");
-            }
-        });
+        List<String> acceptedInviteStudentNames = new ArrayList<>();
+
+        if (existingInvitations != null)
+            existingInvitations.forEach(invitation -> {
+                String repoUrl = invitation.getRepoUrl();
+                StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
+                System.out.printf("Accepting invite for %s [%s]...", repoUrl, studentResponse.getName());
+                try {
+                    githubInvitationService.acceptInvitation(invitation);
+                    acceptedInviteStudentNames.add(studentResponse.getName());
+                    System.out.println("SUCCESSFUL");
+                } catch (Exception e) {
+                    System.out.println("FAILED");
+                }
+            });
+        else {
+            printNoInvitations();
+            return;
+        }
 
         writeFailedInvitations(failedInvitations);
 
+        System.out.println("\n\nAccepted invitations for the following students:");
+        acceptedInviteStudentNames.forEach(System.out::println);
+        System.err.println("{SUGGESTION}: Maybe you want to copy them to the currentStudents.txt file");
+
         System.out.println("\n\nChecking access to the repositories:\n\n");
         CheckAccessActions.checkGithubAccessAction();
+
+
+    }
+
+    private static void printNoInvitations() {
+        System.out.println("No pending invitations matched with students...");
     }
 
     private static void writeFailedInvitations(List<Invitation> failedInvitations) {

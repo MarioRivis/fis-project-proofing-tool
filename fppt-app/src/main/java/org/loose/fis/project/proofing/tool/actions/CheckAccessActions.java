@@ -48,7 +48,7 @@ public class CheckAccessActions {
 
     static boolean checkJiraAccessForStudentResponse(StudentResponse studentResponse) {
         ProjectsService projectsService = new ProjectsService(studentResponse.getJiraUrl(), Config.getJiraCredentials());
-        System.out.printf("Checking Jira access to %s [%s]............", studentResponse.getJiraUrl(), studentResponse.getName());
+        System.out.printf("Checking Jira access to %s [%s] for %s............", studentResponse.getJiraUrl(), studentResponse.getJiraProjectId(), studentResponse.getName());
         try {
             projectsService.getProject(studentResponse.getJiraProjectId());
             System.out.println("SUCCESSFUL");
