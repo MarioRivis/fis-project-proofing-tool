@@ -3,7 +3,7 @@ package org.loose.fis.project.proofing.tool.github.client.repository;
 import com.google.common.collect.ImmutableMap;
 import org.loose.fis.project.proofing.tool.github.client.GithubClient;
 import org.loose.fis.project.proofing.tool.github.client.GithubService;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.http.BasicAuthenticationProvider;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,8 +25,8 @@ public class GithubRepositoryService extends GithubService {
         initMap(owner, repo);
     }
 
-    public GithubRepositoryService(String owner, String repo, BasicAuthCredentials credentials) {
-        super(credentials);
+    public GithubRepositoryService(String owner, String repo, BasicAuthenticationProvider authenticationProvider) {
+        super(authenticationProvider);
         this.owner = owner;
         this.repo = repo;
 

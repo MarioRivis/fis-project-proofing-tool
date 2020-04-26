@@ -1,7 +1,7 @@
 package org.loose.fis.project.proofing.tool;
 
 import lombok.SneakyThrows;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.http.BasicAuthenticationProvider;
 
 import java.io.FileReader;
 import java.nio.file.Path;
@@ -41,12 +41,12 @@ public class Config {
         properties.load(new FileReader(Paths.get(".", "config", FPPT_PROPERTIES).toFile()));
     }
 
-    public static BasicAuthCredentials getGithubCredentials() {
-        return new BasicAuthCredentials(getProperty(GITHUB_USERNAME), getProperty(GITHUB_TOKEN));
+    public static BasicAuthenticationProvider getGithubCredentials() {
+        return new BasicAuthenticationProvider(getProperty(GITHUB_USERNAME), getProperty(GITHUB_TOKEN));
     }
 
-    public static BasicAuthCredentials getJiraCredentials() {
-        return new BasicAuthCredentials(getProperty(JIRA_USERNAME), getProperty(JIRA_TOKEN));
+    public static BasicAuthenticationProvider getJiraCredentials() {
+        return new BasicAuthenticationProvider(getProperty(JIRA_USERNAME), getProperty(JIRA_TOKEN));
     }
 
     public static String getStudentResponsesFilePath() {

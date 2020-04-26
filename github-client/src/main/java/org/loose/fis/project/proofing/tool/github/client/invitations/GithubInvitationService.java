@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import org.loose.fis.project.proofing.tool.github.client.GithubClient;
 import org.loose.fis.project.proofing.tool.github.client.GithubService;
 import org.loose.fis.project.proofing.tool.github.client.dto.response.invitations.Invitation;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.http.BasicAuthenticationProvider;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -21,14 +21,14 @@ public class GithubInvitationService extends GithubService {
         super();
     }
 
-    public GithubInvitationService(BasicAuthCredentials credentials) {
-        super(credentials);
+    public GithubInvitationService(BasicAuthenticationProvider authenticationProvider) {
+        super(authenticationProvider);
     }
 
     @SneakyThrows
     public List<Invitation> listInvitationsForUser() {
 
-        HttpResponse httpResponse = httpClient.get(new GenericUrl(GET_INVITATIONS_URL), credentials);
+        HttpResponse httpResponse = httpClient.get(new GenericUrl(GET_INVITATIONS_URL));
 
         Type type = new TypeToken<List<Invitation>>() {
         }.getType();
@@ -43,7 +43,7 @@ public class GithubInvitationService extends GithubService {
         ImmutableMap<String, String> map = ImmutableMap.of("invitation_id", invitationId.toString());
         String apiPath = GithubClient.getApiPath(map, "user", "repository_invitations", ":invitation_id");
 
-        HttpResponse httpResponse = httpClient.patch(new GenericUrl(apiPath), credentials, null);
+        HttpResponse httpResponse = httpClient.patch(new GenericUrl(apiPath), null);
 
         return httpResponse.getStatusCode() == 204;
     }

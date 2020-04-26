@@ -6,25 +6,30 @@ import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class HttpClient {
 
     private static HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static JsonFactory JSON_FACTORY = new JacksonFactory();
 
+    private HttpRequestInitializer httpRequestInitializer;
 
     @SneakyThrows
-    public HttpResponse get(GenericUrl url, BasicAuthCredentials credentials) {
-        HttpRequestFactory requestFactory = getHttpRequestFactory(credentials);
+    public HttpResponse get(GenericUrl url) {
+        HttpRequestFactory requestFactory = getHttpRequestFactory();
 
         HttpRequest request = requestFactory.buildGetRequest(url);
         return request.execute();
     }
 
     @SneakyThrows
-    public HttpResponse patch(GenericUrl url, BasicAuthCredentials credentials, Object body) {
-        HttpRequestFactory requestFactory = getHttpRequestFactory(credentials);
+    public HttpResponse patch(GenericUrl url, Object body) {
+        HttpRequestFactory requestFactory = getHttpRequestFactory();
 
         JsonHttpContent content = getJsonHttpContent(body);
 
@@ -33,8 +38,8 @@ public class HttpClient {
     }
 
     @SneakyThrows
-    public HttpResponse post(GenericUrl url, BasicAuthCredentials credentials, Object body) {
-        HttpRequestFactory requestFactory = getHttpRequestFactory(credentials);
+    public HttpResponse post(GenericUrl url, Object body) {
+        HttpRequestFactory requestFactory = getHttpRequestFactory();
 
         JsonHttpContent content = getJsonHttpContent(body);
 
@@ -43,8 +48,8 @@ public class HttpClient {
     }
 
     @SneakyThrows
-    public HttpResponse put(GenericUrl url, BasicAuthCredentials credentials, Object body) {
-        HttpRequestFactory requestFactory = getHttpRequestFactory(credentials);
+    public HttpResponse put(GenericUrl url, Object body) {
+        HttpRequestFactory requestFactory = getHttpRequestFactory();
 
         JsonHttpContent content = getJsonHttpContent(body);
 
@@ -60,12 +65,12 @@ public class HttpClient {
         return content;
     }
 
-    private HttpRequestFactory getHttpRequestFactory(BasicAuthCredentials credentials) {
+    private HttpRequestFactory getHttpRequestFactory() {
         return HTTP_TRANSPORT.createRequestFactory(
                 (HttpRequest request) -> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));
-                    if (credentials != null)
-                        request.setInterceptor(new BasicAuthentication(credentials.getUsername(), credentials.getPassword()));
+                    if (httpRequestInitializer != null)
+                        httpRequestInitializer.initialize(request);
                 });
     }
 }

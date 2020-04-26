@@ -15,7 +15,7 @@ import org.loose.fis.project.proofing.tool.github.client.dto.response.repository
 import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.SecretsForRepo;
 import org.loose.fis.project.proofing.tool.github.client.dto.response.repository.actions.secrets.SecretsPublicKey;
 import org.loose.fis.project.proofing.tool.github.client.repository.GithubRepositoryService;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.http.BasicAuthenticationProvider;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ import java.util.List;
 public class GithubSecretsService extends GithubRepositoryService {
 
 
-    public GithubSecretsService(String owner, String repo, BasicAuthCredentials credentials) {
-        super(owner, repo, credentials);
+    public GithubSecretsService(String owner, String repo, BasicAuthenticationProvider authenticationProvider) {
+        super(owner, repo, authenticationProvider);
     }
 
     @SneakyThrows
@@ -33,7 +33,7 @@ public class GithubSecretsService extends GithubRepositoryService {
 
         String apiPath = getApiPath("actions", "secrets");
 
-        HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath), credentials);
+        HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath));
 
         SecretsForRepo secretsForRepo = httpResponse.parseAs(SecretsForRepo.class);
 
@@ -45,7 +45,7 @@ public class GithubSecretsService extends GithubRepositoryService {
 
         String apiPath = getApiPath("actions", "secrets", "public-key");
 
-        HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath), credentials);
+        HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath));
 
         return httpResponse.parseAs(SecretsPublicKey.class);
     }
@@ -56,7 +56,7 @@ public class GithubSecretsService extends GithubRepositoryService {
 
         SecretRequestBody body = createNewSecret(value);
 
-        HttpResponse httpResponse = httpClient.put(new GenericUrl(apiPath), credentials, body);
+        HttpResponse httpResponse = httpClient.put(new GenericUrl(apiPath), body);
 
         int statusCode = httpResponse.getStatusCode();
         return statusCode == 201 || statusCode == 204;

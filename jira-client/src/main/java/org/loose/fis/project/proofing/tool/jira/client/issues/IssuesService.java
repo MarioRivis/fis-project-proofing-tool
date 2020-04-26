@@ -1,11 +1,11 @@
 package org.loose.fis.project.proofing.tool.jira.client.issues;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.common.collect.ImmutableMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 import org.loose.fis.project.proofing.tool.jira.client.JiraPathResolver;
 import org.loose.fis.project.proofing.tool.jira.client.JiraService;
 import org.loose.fis.project.proofing.tool.jira.client.dto.request.issues.JiraIssuesRequestBody;
@@ -24,8 +24,13 @@ import static java.util.Collections.singletonList;
 @Slf4j
 public class IssuesService extends JiraService {
 
-    public IssuesService(String jiraHome, BasicAuthCredentials credentials) {
-        super(jiraHome, credentials);
+
+    public IssuesService(String jiraHome, HttpRequestInitializer httpRequestInitializer) {
+        super(jiraHome, httpRequestInitializer);
+    }
+
+    public IssuesService(String jiraHome) {
+        super(jiraHome);
     }
 
     @SneakyThrows
@@ -43,7 +48,7 @@ public class IssuesService extends JiraService {
 
         do {
 
-            HttpResponse httpResponse = httpClient.get(new IssueChangelogUrl(apiPath, startAt, maxResults), credentials);
+            HttpResponse httpResponse = httpClient.get(new IssueChangelogUrl(apiPath, startAt, maxResults));
 
             Issue issue = httpResponse.parseAs(Issue.class);
 
@@ -88,7 +93,7 @@ public class IssuesService extends JiraService {
 
     @SneakyThrows
     private IssueSearchResult searchIssues(String apiPath, String jqlQuery, int maxResults, int startAt) {
-        HttpResponse httpResponse = httpClient.post(new GenericUrl(apiPath), credentials,
+        HttpResponse httpResponse = httpClient.post(new GenericUrl(apiPath),
                 new JiraIssuesRequestBody(jqlQuery, startAt, maxResults, singletonList("changelog")));
         return httpResponse.parseAs(IssueSearchResult.class);
     }

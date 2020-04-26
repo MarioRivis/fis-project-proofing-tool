@@ -1,17 +1,20 @@
 package org.loose.fis.project.proofing.tool.jira.client;
 
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import com.google.api.client.http.HttpRequestInitializer;
 import org.loose.fis.project.proofing.tool.http.HttpClient;
 
 public class JiraService {
 
     protected String jiraHome;
-    protected BasicAuthCredentials credentials;
     protected HttpClient httpClient;
 
-    public JiraService(String jiraHome, BasicAuthCredentials credentials) {
+    public JiraService(String jiraHome, HttpRequestInitializer httpRequestInitializer) {
         this.jiraHome = jiraHome;
-        this.credentials = credentials;
+        this.httpClient = new HttpClient(httpRequestInitializer);
+    }
+
+    public JiraService(String jiraHome) {
+        this.jiraHome = jiraHome;
         this.httpClient = new HttpClient();
     }
 }

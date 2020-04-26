@@ -1,9 +1,9 @@
 package org.loose.fis.project.proofing.tool.jira.client.issues;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import lombok.SneakyThrows;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
 import org.loose.fis.project.proofing.tool.jira.client.JiraPathResolver;
 import org.loose.fis.project.proofing.tool.jira.client.JiraService;
 import org.loose.fis.project.proofing.tool.jira.client.dto.response.issues.Issue;
@@ -16,14 +16,19 @@ public class IssueCommentsService extends JiraService {
 
 	public static final String API_VERSION = "2";
 
-	public IssueCommentsService(String jiraHome, BasicAuthCredentials credentials) {
-		super(jiraHome, credentials);
+	public IssueCommentsService(String jiraHome, HttpRequestInitializer httpRequestInitializer) {
+		super(jiraHome, httpRequestInitializer);
 	}
+
+	public IssueCommentsService(String jiraHome) {
+		super(jiraHome);
+	}
+
 
 	@SneakyThrows
 	public List<IssueComment> getComments(String issueKey) {
 		String apiPath = new JiraPathResolver(jiraHome, API_VERSION).getApiPath("issue", issueKey, "comment");
-		HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath), credentials);
+		HttpResponse httpResponse = httpClient.get(new GenericUrl(apiPath));
 
 		return httpResponse.parseAs(CommentsSearchResult.class).getComments();
 	}

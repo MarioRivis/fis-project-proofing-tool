@@ -1,7 +1,7 @@
 package org.loose.fis.project.proofing.tool.utils;
 
 import lombok.SneakyThrows;
-import org.loose.fis.project.proofing.tool.http.BasicAuthCredentials;
+import org.loose.fis.project.proofing.tool.http.BasicAuthenticationProvider;
 
 import java.util.Properties;
 
@@ -22,11 +22,11 @@ public class TestUtils {
         properties.load(TestUtils.class.getClassLoader().getResourceAsStream("fppt.properties"));
     }
 
-    public static BasicAuthCredentials getGithubCredentials() {
-        return new BasicAuthCredentials(getProperty("github.username"), getProperty("github.token"));
+    public static BasicAuthenticationProvider getGithubCredentials() {
+        return new BasicAuthenticationProvider(getProperty("github.username"), getProperty("github.token"));
     }
 
-    public static BasicAuthCredentials getJiraCredentials() {
-        return new BasicAuthCredentials(getProperty("jira.username"), getProperty("jira.token"));
+    public static BasicAuthenticationProvider getJiraCredentials() {
+        return new BasicAuthenticationProvider(getProperty("jira.username"), getProperty("jira.token"));
     }
 }
