@@ -160,11 +160,11 @@ public class JiraActions {
                 .count();
         int descLinesAvg = (int) exportIssues.stream()
                 .mapToInt(JiraActions::getDescriptionLinesNumber)
-                .average().getAsDouble();
+                .average().orElse(0);
         int numberOfSubtasksAvg = (int) exportIssues.stream()
                 .filter(exportIssue -> exportIssue.getParent() != null)
                 .mapToInt(exportIssue -> exportIssue.getSubTasks().size())
-                .average().getAsDouble();
+                .average().orElse(0);
         OUT.printf(LINE_FORMAT, "Total",
                 formatInteger(exportIssues.size()),
                 formatInteger((int) assignedIssues),
