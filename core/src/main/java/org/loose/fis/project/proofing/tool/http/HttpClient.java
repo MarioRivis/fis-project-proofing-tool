@@ -38,6 +38,11 @@ public class HttpClient {
     }
 
     @SneakyThrows
+    public HttpResponse post(GenericUrl url) {
+        return post(url, null);
+    }
+
+    @SneakyThrows
     public HttpResponse post(GenericUrl url, Object body) {
         HttpRequestFactory requestFactory = getHttpRequestFactory();
 
