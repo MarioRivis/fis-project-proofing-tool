@@ -1,6 +1,7 @@
 package org.loose.fis.project.proofing.tool.actions;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.io.IOUtils;
 import org.loose.fis.project.proofing.tool.Config;
 import org.loose.fis.project.proofing.tool.StudentResponse;
 import org.loose.fis.project.proofing.tool.StudentsRegistry;
@@ -11,7 +12,6 @@ import org.loose.fis.project.proofing.tool.github.client.repository.contents.Git
 import org.loose.fis.project.proofing.tool.github.client.repository.pullrequests.GithubPullRequestsService;
 import org.loose.fis.project.proofing.tool.github.client.repository.refs.GithubRefsService;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -100,7 +100,8 @@ public class WorkflowActions {
         }
     }
 
-    private static CreateFileRequestBody createContentBodyFor(StudentResponse studentResponse) {
+    @VisibleForTesting
+    static CreateFileRequestBody createContentBodyFor(StudentResponse studentResponse) {
         String resourceToLoad;
         if (studentResponse.getBuildTool().equalsIgnoreCase(MAVEN))
             resourceToLoad = MAVEN_RESOURCE;
@@ -113,11 +114,10 @@ public class WorkflowActions {
 
         String fileContent;
         try {
-            fileContent = FileUtils.readFileToString(new File(
-                            WorkflowActions.class.getClassLoader().getResource(resourceToLoad).getFile()),
-                    StandardCharsets.UTF_8.toString());
+            fileContent = IOUtils.toString(WorkflowActions.class.getClassLoader().getResourceAsStream(resourceToLoad), StandardCharsets.UTF_8.name());
         } catch (IOException e) {
             System.err.println("Failed to read the resource file " + resourceToLoad);
+            e.printStackTrace();
             return null;
         }
 
