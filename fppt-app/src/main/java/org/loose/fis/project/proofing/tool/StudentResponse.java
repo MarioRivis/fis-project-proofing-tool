@@ -2,6 +2,7 @@ package org.loose.fis.project.proofing.tool;
 
 import com.google.api.client.util.Key;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class StudentResponse {
@@ -42,5 +43,10 @@ public class StudentResponse {
             return remainingParts[1];
 
         return null;
+    }
+
+    public String getAllNames() {
+        return String.join("-", firstMember, secondMember, StringUtils.isEmpty(thirdMember) ? "" : thirdMember)
+                .replace(" ", "_");
     }
 }

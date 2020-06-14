@@ -21,6 +21,7 @@ public class Main {
         actionsMap.put(Command.GET_JIRA_SUMMARY, JiraActions::getJiraSummary);
         actionsMap.put(Command.NORMALIZE_JIRA_URLS, NormalizeActions::normalizeJiraUrl);
         actionsMap.put(Command.NORMALIZE_GITHUB_URLS, NormalizeActions::normalizeGithubUrl);
+        actionsMap.put(Command.CLONE_ALL_REPOS, CloneAllReposCommand::cloneAllRepos);
     }
 
     public static void main(String[] args) {

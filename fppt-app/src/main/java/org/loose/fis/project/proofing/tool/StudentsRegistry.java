@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,6 +38,10 @@ public class StudentsRegistry {
         return _instance;
     }
 
+    public List<StudentResponse> getAllStudents() {
+        return new ArrayList<>(studentResponses.values());
+    }
+
     public List<StudentResponse> getForTeacher() {
         loadCurrentStudents();
         return getAllForTeacher().stream()
@@ -61,21 +62,24 @@ public class StudentsRegistry {
     }
 
     private void loadCurrentStudents() {
-        Path currentStudentPath = Config.getCurrentStudentPath();
-        if (!Files.exists(currentStudentPath))
-            currentStudents = Collections.emptyList();
-        try {
-            currentStudents = Files.readAllLines(currentStudentPath).stream()
-                    .filter(StringUtils::isNotBlank)
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            currentStudents = Collections.emptyList();
+        if (currentStudents == null) {
+            Path currentStudentPath = Config.getCurrentStudentPath();
+            if (!Files.exists(currentStudentPath)) {
+                currentStudents = Collections.emptyList();
+            }
+            try {
+                currentStudents = Files.readAllLines(currentStudentPath).stream()
+                        .filter(StringUtils::isNotBlank)
+                        .collect(Collectors.toList());
+            } catch (IOException e) {
+                currentStudents = Collections.emptyList();
+            }
         }
     }
 
-    public Optional<StudentResponse> getByGitRepo(String gitRepo) {
+    public Optional<StudentResponse> getByGitRepoUrl(String gitRepoUrl) {
         List<StudentResponse> responsesWithThisRepo = getAllForTeacher().stream()
-                .filter(studentResponse -> studentResponse.getRepoUrl().trim().startsWith(gitRepo))
+                .filter(studentResponse -> studentResponse.getRepoUrl().trim().startsWith(gitRepoUrl))
                 .collect(Collectors.toList());
 
         if (responsesWithThisRepo.isEmpty())
@@ -86,8 +90,8 @@ public class StudentsRegistry {
         }
 
         StudentResponse studentResponse = responsesWithThisRepo.get(0);
-        if (!studentResponse.getRepoUrl().equalsIgnoreCase(gitRepo)) {
-            studentResponse.setRepoUrl(gitRepo);
+        if (!studentResponse.getRepoUrl().equalsIgnoreCase(gitRepoUrl)) {
+            studentResponse.setRepoUrl(gitRepoUrl);
         }
 
         return Optional.ofNullable(studentResponse);

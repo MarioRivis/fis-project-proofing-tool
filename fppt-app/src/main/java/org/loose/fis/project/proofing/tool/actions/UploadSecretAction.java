@@ -10,7 +10,7 @@ public class UploadSecretAction {
 
     public static boolean createJiraTokenSecretFor(StudentResponse studentResponse) {
         GithubSecretsService githubSecretsService = new GithubSecretsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
-        System.out.printf("Creating Jira Secret for %s............", studentResponse.getJiraUrl());
+        System.out.printf("Creating Jira Secret for %s............", studentResponse.getRepoUrl());
         try {
             githubSecretsService.createSecret(JIRA_SECRET_NAME, Config.getJiraToken());
             System.out.println("SUCCESSFUL");

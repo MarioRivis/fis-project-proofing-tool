@@ -90,6 +90,14 @@ public class WorkflowActions {
         GithubRefsService githubRefsService = new GithubRefsService(studentResponse.getOwner(), studentResponse.getRepo(), Config.getGithubCredentials());
         System.out.printf("Creating branch %s for repo %s............", BUILD_ACTIONS_BRANCH, studentResponse.getRepoUrl());
         try {
+            try {
+                Ref buildActionsRef = githubRefsService.getBranch(BUILD_ACTIONS_BRANCH);
+                if (buildActionsRef != null) {
+                    System.out.printf("\nBranch %s already exists!\n", BUILD_ACTIONS_BRANCH);
+                    return false;
+                }
+            } catch (Exception e) {
+            }
             Ref master = githubRefsService.getBranch(MASTER);
             githubRefsService.createBranch(BUILD_ACTIONS_BRANCH, master.getObject().getSha());
             System.out.println("SUCCESSFUL");

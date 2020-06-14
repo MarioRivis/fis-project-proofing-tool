@@ -1,5 +1,7 @@
 package org.loose.fis.project.proofing.tool.http;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -20,6 +22,7 @@ public class PathResolver {
 				.collect(Collectors.joining("/"));
 	}
 
+	@VisibleForTesting
 	String replacePlaceholders(String var, Map<String, String> variablesValues) {
 		if (var.startsWith(":"))
 			return variablesValues.getOrDefault(var.replace(":", ""), var);

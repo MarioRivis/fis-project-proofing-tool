@@ -64,4 +64,18 @@ public class Config {
     public static Path getCurrentStudentPath() {
         return Paths.get(".", "config", CURRENT_STUDENTS);
     }
+
+    public static BasicAuthenticationProvider getGithubCredentialsForTeacher(String teacher) {
+        teacher = getTeacherFirstName(teacher);
+        return new BasicAuthenticationProvider(getProperty(teacher + "." + GITHUB_USERNAME), getProperty(teacher + "." + GITHUB_TOKEN));
+    }
+
+    public static BasicAuthenticationProvider getJiraCredentialsForTeacher(String teacher) {
+        teacher = getTeacherFirstName(teacher);
+        return new BasicAuthenticationProvider(getProperty(teacher + "." + JIRA_USERNAME), getProperty(teacher + "." + JIRA_TOKEN));
+    }
+
+    private static String getTeacherFirstName(String teacherFullName) {
+        return teacherFullName.split(" ")[0].toLowerCase();
+    }
 }

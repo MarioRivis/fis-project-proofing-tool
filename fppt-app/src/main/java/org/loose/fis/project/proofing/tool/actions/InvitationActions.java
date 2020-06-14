@@ -41,7 +41,7 @@ public class InvitationActions {
         if (existingInvitations != null)
             existingInvitations.forEach(invitation -> {
                 String repoUrl = invitation.getRepoUrl();
-                StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
+                StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepoUrl(repoUrl).get();
                 System.out.printf("Accepting invite for %s [%s]-[%d]...", repoUrl, studentResponse.getName(), studentResponse.getId());
                 try {
                     githubInvitationService.acceptInvitation(invitation);
@@ -89,12 +89,12 @@ public class InvitationActions {
     }
 
     private static Boolean invitationRepoExistsInStudentResponses(Invitation invitation) {
-        return StudentsRegistry.getInstance().getByGitRepo(invitation.getRepoUrl()).isPresent();
+        return StudentsRegistry.getInstance().getByGitRepoUrl(invitation.getRepoUrl()).isPresent();
     }
 
     private static String formatInvitation(Invitation invitation) {
         String repoUrl = invitation.getRepoUrl();
-        StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepo(repoUrl).get();
+        StudentResponse studentResponse = StudentsRegistry.getInstance().getByGitRepoUrl(repoUrl).get();
 
         return String.format("[%s] -> %s -> %s [%d] -> %s", invitation.getPermissions(), studentResponse.getProjectTitle(), studentResponse.getName(), studentResponse.getId(), repoUrl);
     }

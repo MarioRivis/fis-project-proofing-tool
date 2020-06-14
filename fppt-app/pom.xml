@@ -69,6 +69,11 @@
             <artifactId>jira-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>5.6.1.202002131546-r</version>
+        </dependency>
     </dependencies>
 
     <repositories>

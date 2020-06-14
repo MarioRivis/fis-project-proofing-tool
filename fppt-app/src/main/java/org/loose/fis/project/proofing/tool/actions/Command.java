@@ -15,7 +15,8 @@ public enum Command {
     GET_JIRA_SUMMARY("getJiraSummary"),
     GET_GIT_SUMMARY("getGitSummary"),
     NORMALIZE_JIRA_URLS("normalizeJira"),
-    NORMALIZE_GITHUB_URLS("normalizeGit");
+    NORMALIZE_GITHUB_URLS("normalizeGit"),
+    CLONE_ALL_REPOS("cloneAllRepos");
 
     private final String name;
 
